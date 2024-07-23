@@ -17,6 +17,7 @@ nav ul {
     display: flex;
     justify-content: center;
     background: #fff;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
 nav ul li {
@@ -63,4 +64,29 @@ a:hover {
 
 p {
     margin: 0.5rem 0;
+}
+
+/* Media Queries for Mobile Devices */
+@media (max-width: 768px) {
+    nav ul {
+        flex-direction: column; /* Stack the nav items vertically on small screens */
+    }
+    
+    section {
+        padding: 1rem;
+        margin: 0.5rem 0;
+    }
+
+    header, section, nav ul li {
+        padding: 0.5rem;
+    }
+    
+    nav ul li {
+        margin: 0.5rem 0;
+    }
+    
+    nav ul li a {
+        padding: 1rem;
+        font-size: 1.2rem; /* Increase font size for better readability on mobile */
+    }
 }
