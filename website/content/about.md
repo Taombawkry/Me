@@ -1,12 +1,12 @@
-# content/about.md
+<!-- # content/about.md -->
 
-## About Me
+# About Me
 
 I'm passionate about technology and its potential to drive positive change.
 
 Interests: Decentralized Technology | Open Source | Public Goods | Conservation | Wondering Why | Music | Esoteric Reads
 
-Currently:
+*Currently:*
 
 - part of the team @ [SummitShare](https://summitshare.co)
 - Monitoring and Evaluation @ [Time and Tide Foundation Africa](https://timeandtidefoundation.org/)

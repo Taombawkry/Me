@@ -1,5 +1,5 @@
-# content/email.md
+<!-- # content/email.md -->
 
-## Email
+# Email
 
 [thomas.gondwe@outlook.com](mailto:thomas.gondwe@outlook.com)

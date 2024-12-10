@@ -1,5 +1,5 @@
-# content/schedule.md
+<!-- # content/schedule.md -->
 
-## Schedule a Call
+# Schedule a Call
 
 [Here](https://calendly.com/thomas-gondwe/chat-with-thomas)

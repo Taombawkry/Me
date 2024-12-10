@@ -1,6 +1,6 @@
-# content/social.md
+<!-- # content/social.md -->
 
-## Social Links
+# Social Links
 
 - [GitHub](https://github.com/Taombawkry)
 - [Telegram](https:/t.me/gondwet)

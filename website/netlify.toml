@@ -1,0 +1,7 @@
+# netlify.toml
+[build]
+  command = "pip install markdown && python build.py"
+  publish = "output"
+  
+[build.environment]
+  PYTHON_VERSION = "3.8"

@@ -92,7 +92,6 @@ p {
     margin: 1rem 0;
 }
 
-/* Media Queries for Mobile Devices */
 @media (max-width: 768px) {
     body {
         padding: 0 1rem;
@@ -114,23 +113,4 @@ p {
         padding: 0.5rem;
         font-size: 1rem;
     }
-}
-
-
-::selection {
-    background: #e0e0e0;
-    color: #1a1a1a;
-}
-
-section p {
-    font-size: 0.95rem;
-}
-
-section li {
-    font-size: 0.95rem;
-}
-
-/* Add a subtle hover effect to sections */
-section:hover {
-    background: #fafafa;
 }
