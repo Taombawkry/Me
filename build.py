@@ -2,6 +2,8 @@ import markdown
 import os
 from pathlib import Path
 import yaml 
+import json
+from datetime import date, datetime
 
 def parse_markdown_with_frontmatter(content):
     """Parse markdown content with YAML frontmatter"""
@@ -18,6 +20,13 @@ def parse_markdown_with_frontmatter(content):
                 print(f"Error parsing frontmatter: {e}")
                 return {}, content
     return {}, content
+
+class CustomJSONEncoder(json.JSONEncoder):
+    """Custom JSON encoder to handle dates"""
+    def default(self, obj):
+        if isinstance(obj, (date, datetime)):
+            return obj.isoformat()
+        return super().default(obj)
 
 def create_initial_files():
     """Create the initial directory structure and files if they don't exist"""
@@ -263,8 +272,8 @@ def convert_markdown_to_html():
     write_file('output/index.html', final_html)
     
     if metadata:
-        import json
-        write_file('output/metadata.json', json.dumps(metadata, indent=2))
+        metadata_json = json.dumps(metadata, indent=2, cls=CustomJSONEncoder)
+        write_file('output/metadata.json', metadata_json)
     
     print("Website generation complete! Check the output/index.html file.")
 
