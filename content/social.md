@@ -5,7 +5,7 @@ tags: ["website"]
 ---
 
 
-# Social Links
+## Social Links
 
 - [GitHub](https://github.com/Taombawkry)
 - [Telegram](https:/t.me/gondwet)

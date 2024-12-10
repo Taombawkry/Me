@@ -5,7 +5,7 @@ tags: ["website"]
 ---
 
 
-# Writings
+## Writings
 
 - [Relativism of Art](https://hackmd.io/@Taombawkry/rkYz3ZPyC)
 - [What is SummitShare?](https://summitshare.co/blog/HyyljFKaa)
