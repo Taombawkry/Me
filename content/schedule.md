@@ -1,4 +1,8 @@
-<!-- # content/schedule.md -->
+---
+title: "schedule"
+date: 2024-12-10
+tags: ["website"]
+---
 
 # Schedule a Call
 

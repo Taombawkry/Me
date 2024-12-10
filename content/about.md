@@ -1,4 +1,9 @@
-<!-- # content/about.md -->
+---
+title: "about"
+date: 2024-12-10
+tags: ["website"]
+---
+
 
 # About Me
 

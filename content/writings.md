@@ -1,4 +1,9 @@
-<!-- # content/writings.md -->
+---
+title: "writings"
+date: 2024-12-10
+tags: ["website"]
+---
+
 
 # Writings
 
