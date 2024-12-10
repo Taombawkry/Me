@@ -15,12 +15,49 @@ def convert_markdown_to_html():
     md = markdown.Markdown()
     
     # Read template
-    template = read_file('template.html')
-    
-    # Initialize content sections
-    sections = {}
+    template = """<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thomas Gondwe - Personal Website</title>
+    <style type="text/css">
+%s
+    </style>
+</head>
+<body>
+    <header>
+        %s
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#about">About Me</a></li>
+            <li><a href="#social-links">Social Links</a></li>
+            <li><a href="#writings">Writings</a></li>
+            <li><a href="#email">Email</a></li>
+            <li><a href="#schedule-call">Schedule a Call</a></li>
+        </ul>
+    </nav>
+    <section id="about">
+        %s
+    </section>
+    <section id="social-links">
+        %s
+    </section>
+    <section id="writings">
+        %s
+    </section>
+    <section id="email">
+        %s
+    </section>
+    <section id="schedule-call">
+        %s
+    </section>
+</body>
+</html>"""
     
     # Convert each markdown file to HTML
+    sections = {}
     content_dir = Path('content')
     for md_file in content_dir.glob('*.md'):
         section_name = md_file.stem  # Get filename without extension
@@ -31,14 +68,16 @@ def convert_markdown_to_html():
     # Read CSS
     css = read_file('styles.css')
     
-    # Replace placeholders in template
-    final_html = template
-    for section_name, content in sections.items():
-        placeholder = f'{{{{ {section_name} }}}}'
-        final_html = final_html.replace(placeholder, content)
-    
-    # Replace CSS placeholder
-    final_html = final_html.replace('{{ styles }}', css)
+    # Create the final HTML using string formatting
+    final_html = template % (
+        css,
+        sections.get('header', ''),
+        sections.get('about', ''),
+        sections.get('social', ''),
+        sections.get('writings', ''),
+        sections.get('email', ''),
+        sections.get('schedule', '')
+    )
     
     # Create output directory if it doesn't exist
     os.makedirs('output', exist_ok=True)
