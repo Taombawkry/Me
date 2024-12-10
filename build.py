@@ -1,6 +1,23 @@
 import markdown
 import os
 from pathlib import Path
+import yaml 
+
+def parse_markdown_with_frontmatter(content):
+    """Parse markdown content with YAML frontmatter"""
+    # Check if content starts with frontmatter delimiter
+    if content.startswith('---'):
+        parts = content.split('---', 2)
+        if len(parts) >= 3:
+            # Parse the YAML frontmatter
+            try:
+                frontmatter = yaml.safe_load(parts[1])
+                # Return the frontmatter and the remaining markdown content
+                return frontmatter, parts[2]
+            except yaml.YAMLError as e:
+                print(f"Error parsing frontmatter: {e}")
+                return {}, content
+    return {}, content
 
 def create_initial_files():
     """Create the initial directory structure and files if they don't exist"""
@@ -127,8 +144,7 @@ p {
         font-size: 1rem;
     }
 }""")
-    
-    # Create initial markdown files if they don't exist
+                # Create initial markdown files if they don't exist
     sections = ['header', 'about', 'social', 'writings', 'email', 'schedule']
     for section in sections:
         filepath = f'content/{section}.md'
@@ -162,23 +178,34 @@ def convert_markdown_to_html():
     print("Created initial files and directories...")
     
     # Create markdown converter
-    md = markdown.Markdown()
+    md = markdown.Markdown(extensions=['meta'])
     
     # Convert each markdown file to HTML
     sections = {}
+    metadata = {}  # Store metadata for each section
     content_dir = Path('content')
+    
     for md_file in content_dir.glob('*.md'):
         section_name = md_file.stem
         print(f"Converting {md_file}...")
-        markdown_content = read_file(md_file)
+        
+        # Read and parse the markdown content
+        content = read_file(md_file)
+        frontmatter, markdown_content = parse_markdown_with_frontmatter(content)
+        
+        # store metadata
+        if frontmatter:
+            metadata[section_name] = frontmatter
+        
+        # convert to HTML
         html_content = md.convert(markdown_content)
         sections[section_name] = html_content
     
-    # Read CSS
+    # read CSS
     print("Reading CSS...")
     css = read_file('styles.css')
     
-    # Create the final HTML
+    # create the final HTML
     print("Generating final HTML...")
     template = """<!DOCTYPE html>
 <html lang="en">
@@ -231,9 +258,14 @@ def convert_markdown_to_html():
         sections.get('schedule', '')
     )
     
-    # Write the final HTML file
+    # write the final HTML file
     print("Writing output file...")
     write_file('output/index.html', final_html)
+    
+    if metadata:
+        import json
+        write_file('output/metadata.json', json.dumps(metadata, indent=2))
+    
     print("Website generation complete! Check the output/index.html file.")
 
 if __name__ == '__main__':

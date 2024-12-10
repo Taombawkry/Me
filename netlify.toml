@@ -1,6 +1,5 @@
-# netlify.toml
 [build]
-  command = "pip install markdown && python build.py"
+  command = "pip install markdown pyyaml && python build.py"
   publish = "output"
   
 [build.environment]
