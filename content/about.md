@@ -7,9 +7,9 @@ tags: ["website"]
 
 ## About Me
 
-I'm passionate about technology and its potential to drive positive change.
+I'm passionate about technology and its potential to drive positive human change.
 
-Interests: Decentralized Technology | Open Source | Public Goods | Conservation | Wondering Why | Music | Esoteric Reads
+Interests: Decentralized Technology | Open Source | Public/Commons Goods | Conservation | Privacy Tech |  Wondering Why | Music | Esoteric Reads | 
 
 *Currently:*
 
