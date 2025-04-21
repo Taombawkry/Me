@@ -1,10 +1,3 @@
----
-title: "writings"
-date: 2024-12-10
-tags: ["website"]
----
-
-
 ## Writings
 
 - [Relativism of Art](https://hackmd.io/@Taombawkry/rkYz3ZPyC)
@@ -14,3 +7,4 @@ tags: ["website"]
 - [Ethereum for Social Impact: Building Systems, Standards, and Stories for Global Change](https://hackmd.io/@Taombawkry/BJVrI4DXke)
 - [Digital Repatriation](https://blog.ethereum.org/2024/12/09/digital-repatriation)
 - [Movie Essay: Between Reality and Fiction](https://hackmd.io/@Taombawkry/rJRYMi7Jll)
+
