@@ -1,281 +1,192 @@
-import markdown
+#!/usr/bin/env python3
+"""
+build.py — a minimalist orchestrator that:
+  1. Reads content/
+  2. Converts Markdown → HTML via Markdown+mermaid2
+  3. Renders with Jinja2 templates
+"""
 import os
-from pathlib import Path
-import yaml 
+import shutil
+import yaml
 import json
-from datetime import date, datetime
+import re
+from pathlib import Path
+from datetime import datetime, date
+from markdown import Markdown
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-def parse_markdown_with_frontmatter(content):
-    """Parse markdown content with YAML frontmatter"""
-    # Check if content starts with frontmatter delimiter
-    if content.startswith('---'):
-        parts = content.split('---', 2)
-        if len(parts) >= 3:
-            # Parse the YAML frontmatter
-            try:
-                frontmatter = yaml.safe_load(parts[1])
-                # Return the frontmatter and the remaining markdown content
-                return frontmatter, parts[2]
-            except yaml.YAMLError as e:
-                print(f"Error parsing frontmatter: {e}")
-                return {}, content
-    return {}, content
+# Paths
+CONTENT_DIR = Path('content')
+OUTPUT_DIR  = Path('output')
+TEMPLATES   = FileSystemLoader('templates')
+env = Environment(
+    loader=TEMPLATES,
+    autoescape=select_autoescape(['html'])
+)
 
-class CustomJSONEncoder(json.JSONEncoder):
-    """Custom JSON encoder to handle dates"""
-    def default(self, obj):
-        if isinstance(obj, (date, datetime)):
-            return obj.isoformat()
-        return super().default(obj)
+# Initialize Markdown with mermaid
+md = Markdown(extensions=[
+    'meta',
+    'fenced_code',
+    'codehilite',
+    'markdown_mermaid'   
+])
 
-def create_initial_files():
-    """Create the initial directory structure and files if they don't exist"""
-    # Create directories
-    os.makedirs('content', exist_ok=True)
-    os.makedirs('output', exist_ok=True)
-    
-    # Create styles.css if it doesn't exist
-    if not os.path.exists('styles.css'):
-        with open('styles.css', 'w', encoding='utf-8') as f:
-            f.write("""body {
-    font-family: 'Courier New', Courier, monospace;
-    margin: 0 auto;
-    padding: 0;
-    line-height: 1.6;
-    text-align: center;
-    max-width: 800px;
-    background: #ffffff;
-    color: #1a1a1a;
-}
+def clean_output():
+    if OUTPUT_DIR.exists():
+        shutil.rmtree(OUTPUT_DIR)
+    OUTPUT_DIR.mkdir(parents=True)
 
-header {
-    padding: 2rem 0;
-    border-bottom: 1px solid #e0e0e0;
-}
+def load_markdown(path: Path):
+    text = path.read_text(encoding='utf-8')
+    if text.startswith('---'):
+        _, fm, body = text.split('---', 2)
+        front = yaml.safe_load(fm)
+    else:
+        front, body = {}, text
+    html = md.convert(body)
+    md.reset()  # clear metadata for next file
+    return front, html
 
-header h1 {
-    font-size: 2rem;
-    font-weight: normal;
-    margin: 0;
-}
+def clean_html(html):
+    """Remove HTML tags and clean up whitespace"""
+    clean = re.sub(r'<[^>]+>', '', html)
+    clean = re.sub(r'\s+', ' ', clean)
+    return clean.strip()
 
-nav ul {
-    list-style: none;
-    padding: 1rem 0;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    background: #fff;
-    flex-wrap: wrap;
-    border-bottom: 1px solid #e0e0e0;
-}
+def build_blog():
+    """
+    Process blog posts and render them.
+    Robustly parse frontmatter dates (date, datetime, or ISO string).
+    """
+    posts = []
+    categories = {}
 
-nav ul li {
-    margin: 0 1rem;
-}
+    # Iterate over each category folder under content/blog
+    for cat_dir in (CONTENT_DIR / 'blog').iterdir():
+        if not cat_dir.is_dir():
+            continue
 
-nav ul li a {
-    text-decoration: none;
-    padding: 0.5rem;
-    display: block;
-    color: #1a1a1a;
-    font-size: 0.9rem;
-}
+        for md_file in cat_dir.glob('*.md'):
+            # Load frontmatter and HTML
+            fm, html = load_markdown(md_file)
 
-nav ul li a:hover {
-    text-decoration: underline;
-    background: #f5f5f5;
-}
+            # ==== Robust date parsing ====
+            raw_date = fm.get('date', None)
+            if isinstance(raw_date, datetime):
+                date_obj = raw_date
+            elif isinstance(raw_date, date):
+                # combine date with midnight time
+                date_obj = datetime.combine(raw_date, datetime.min.time())
+            elif isinstance(raw_date, str):
+                try:
+                    date_obj = datetime.fromisoformat(raw_date)
+                except ValueError:
+                    # fallback if string isn't ISO
+                    date_obj = datetime.now()
+            else:
+                date_obj = datetime.now()
+            # ==============================
 
-section {
-    padding: 2rem;
-    margin: 1rem 0;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-}
+            # Clean excerpt
+            excerpt = clean_html(html)[:150] + '…'
 
-section:last-child {
-    border-bottom: none;
-}
+            # Build the post dict
+            post = {
+                'title': fm.get('title', md_file.stem),
+                'description': fm.get('description', ''),   
+                'date': date_obj,
+                'category': cat_dir.name,
+                'tags': fm.get('tags', []),
+                'excerpt': excerpt,
+                'content': html,
+                'slug': md_file.stem,
+                'link': f"{cat_dir.name}/{md_file.stem}.html"  # Removed blog/ prefix
+            }
 
-section h2 {
-    font-size: 1.5rem;
-    font-weight: normal;
-    margin-top: 0;
-    margin-bottom: 1.5rem;
-    color: #333;
-}
+            posts.append(post)
+            categories.setdefault(cat_dir.name, []).append(post)
 
-ul {
-    list-style: none;
-    padding: 0;
-}
+    # Sort posts newest-first
+    posts.sort(key=lambda p: p['date'], reverse=True)
+    for cat_posts in categories.values():
+        cat_posts.sort(key=lambda p: p['date'], reverse=True)
 
-ul li {
-    margin: 0.75rem 0;
-    line-height: 1.5;
-}
+    # Add prev/next links to posts
+    for i, post in enumerate(posts):
+        post['prev'] = posts[i + 1] if i < len(posts) - 1 else None
+        post['next'] = posts[i - 1] if i > 0 else None
 
-a {
-    color: #0066cc;
-    text-decoration: none;
-    padding: 0.1rem 0.2rem;
-}
+    # Render each post with Jinja2 post.html
+    tmpl = env.get_template('post.html')
+    for post in posts:
+        outpath = OUTPUT_DIR / 'blog' / post['link']  # Added blog/ here instead
+        outpath.parent.mkdir(parents=True, exist_ok=True)
+        rendered = tmpl.render(
+            title=post['title'],
+            post=post,
+            home_link='../../index.html',
+            blog_link='../../blog/index.html',
+            css_path='../../styles.css'
+        )
+        outpath.write_text(rendered, encoding='utf-8')
 
-a:hover {
-    text-decoration: underline;
-    background: #f0f0f0;
-}
-
-p {
-    margin: 1rem 0;
-}
-
-@media (max-width: 768px) {
-    body {
-        padding: 0 1rem;
-    }
-    
-    nav ul {
-        flex-direction: column;
-    }
-    
-    section {
-        padding: 1rem 0;
-    }
-    
-    nav ul li {
-        margin: 0.5rem 0;
-    }
-    
-    nav ul li a {
-        padding: 0.5rem;
-        font-size: 1rem;
-    }
-}""")
-                # Create initial markdown files if they don't exist
-    sections = ['header', 'about', 'social', 'writings', 'email', 'schedule']
-    for section in sections:
-        filepath = f'content/{section}.md'
-        if not os.path.exists(filepath):
-            with open(filepath, 'w', encoding='utf-8') as f:
-                f.write(f'## {section.title()}\n\nAdd your content here.')
-
-def read_file(filepath):
-    try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            return f.read()
-    except FileNotFoundError:
-        print(f"Error: Could not find {filepath}")
-        return ""
-    except Exception as e:
-        print(f"Error reading {filepath}: {str(e)}")
-        return ""
-
-def write_file(filepath, content):
-    try:
-        with open(filepath, 'w', encoding='utf-8') as f:
-            f.write(content)
-    except Exception as e:
-        print(f"Error writing to {filepath}: {str(e)}")
-
-def convert_markdown_to_html():
-    print("Starting website generation...")
-    
-    # Create initial files if they don't exist
-    create_initial_files()
-    print("Created initial files and directories...")
-    
-    # Create markdown converter
-    md = markdown.Markdown(extensions=['meta'])
-    
-    # Convert each markdown file to HTML
-    sections = {}
-    metadata = {}  # Store metadata for each section
-    content_dir = Path('content')
-    
-    for md_file in content_dir.glob('*.md'):
-        section_name = md_file.stem
-        print(f"Converting {md_file}...")
-        
-        # Read and parse the markdown content
-        content = read_file(md_file)
-        frontmatter, markdown_content = parse_markdown_with_frontmatter(content)
-        
-        # store metadata
-        if frontmatter:
-            metadata[section_name] = frontmatter
-        
-        # convert to HTML
-        html_content = md.convert(markdown_content)
-        sections[section_name] = html_content
-    
-    # read CSS
-    print("Reading CSS...")
-    css = read_file('styles.css')
-    
-    # create the final HTML
-    print("Generating final HTML...")
-    template = """<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thomas Gondwe - Personal Website</title>
-    <style type="text/css">
-%s
-    </style>
-</head>
-<body>
-    <header>
-        %s
-    </header>
-    <nav>
-        <ul>
-            <li><a href="#about">About Me</a></li>
-            <li><a href="#social-links">Social Links</a></li>
-            <li><a href="#writings">Writings</a></li>
-            <li><a href="#email">Email</a></li>
-            <li><a href="#schedule-call">Schedule a Call</a></li>
-        </ul>
-    </nav>
-    <section id="about">
-        %s
-    </section>
-    <section id="social-links">
-        %s
-    </section>
-    <section id="writings">
-        %s
-    </section>
-    <section id="email">
-        %s
-    </section>
-    <section id="schedule-call">
-        %s
-    </section>
-</body>
-</html>"""
-    
-    final_html = template % (
-        css,
-        sections.get('header', ''),
-        sections.get('about', ''),
-        sections.get('social', ''),
-        sections.get('writings', ''),
-        sections.get('email', ''),
-        sections.get('schedule', '')
+    # ——— Render the main blog index ———
+    bi = env.get_template('blog_index.html')
+    blog_index_html = bi.render(
+        title="Blog",
+        posts=posts,
+        categories=[
+            {'name': name, 'link': f"category/{name}.html"} 
+            for name in categories
+        ],
+        index_link="index.html",
+        category=None,
+        home_link="../index.html",
+        blog_link="index.html",
+        css_path="../styles.css"
     )
-    
-    # write the final HTML file
-    print("Writing output file...")
-    write_file('output/index.html', final_html)
-    
-    if metadata:
-        metadata_json = json.dumps(metadata, indent=2, cls=CustomJSONEncoder)
-        write_file('output/metadata.json', metadata_json)
-    
-    print("Website generation complete! Check the output/index.html file.")
+    # write it out
+    (OUTPUT_DIR / 'blog').mkdir(parents=True, exist_ok=True)
+    (OUTPUT_DIR / 'blog' / 'index.html').write_text(blog_index_html, encoding='utf-8')
+
+    # ——— Render each category page ———
+    for name, cat_posts in categories.items():
+        cat_html = bi.render(
+            title=f"Blog — {name.title()}",
+            posts=cat_posts,
+            categories=[
+                {'name': n, 'link': f"{n}.html"} 
+                for n in categories
+            ],
+            index_link="../index.html",
+            category=name,
+            home_link="../../index.html",  # Fixed path
+            blog_link="../index.html",     # Fixed path
+            css_path="../../styles.css"    # Fixed path
+        )
+        outpath = OUTPUT_DIR / 'blog' / 'category' / f"{name}.html"
+        outpath.parent.mkdir(parents=True, exist_ok=True)
+        outpath.write_text(cat_html, encoding='utf-8')
+
+
+def build_site():
+    clean_output()
+    # Copy static assets
+    shutil.copy('styles.css', OUTPUT_DIR / 'styles.css')
+    shutil.copy('blog-styles.css', OUTPUT_DIR / 'blog-styles.css')
+    # Build main sections
+    sections = {p.stem: load_markdown(p) for p in CONTENT_DIR.glob('*.md')}
+    base_tmpl = env.get_template('index.html')
+    html = base_tmpl.render(
+        title="Thomas Gondwe",
+        css_path='styles.css',
+        **{ name: content for name, (_, content) in sections.items() }
+    )
+    (OUTPUT_DIR / 'index.html').write_text(html, encoding='utf-8')
+    # Blog
+    build_blog()
+    print("✨ Build complete — check output/index.html")
 
 if __name__ == '__main__':
-    convert_markdown_to_html()
+    build_site()
