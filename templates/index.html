@@ -1,0 +1,60 @@
+{# templates/index.html #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  {# Link to your main site stylesheet #}
+  <link rel="stylesheet" href="{{ css_path }}">
+</head>
+<body>
+  <header class="site-header">
+    <h1>Thomas M. Gondwe</h1>
+  </header>
+
+  {# == Navigation == #}
+  <nav>
+    <ul>
+      <li><a href="#about">About Me</a></li>
+      <li><a href="#social-links">Social Links</a></li>
+      <li><a href="blog/index.html">Blog</a></li>
+      <li><a href="#writings">Writings</a></li>
+      <li><a href="#email">Email</a></li>
+      <li><a href="#schedule-call">Schedule a Call</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    {# == About Section == #}
+    <section id="about">
+      {{ about | safe }}
+    </section>
+
+    {# == Social Links Section == #}
+    <section id="social-links">
+      {{ social | safe }}
+    </section>
+
+    {# == Blog Teaser Section == #}
+    <section id="blog">
+      {{ blog | safe }}
+    </section>
+
+    {# == Writings Section == #}
+    <section id="writings">
+      {{ writings | safe }}
+    </section>
+
+    {# == Email Section == #}
+    <section id="email">
+      {{ email | safe }}
+    </section>
+
+    {# == Schedule-a-Call Section == #}
+    <section id="schedule-call">
+      {{ schedule | safe }}
+    </section>
+  </main>
+</body>
+</html>
