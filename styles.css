@@ -93,7 +93,7 @@ section h2::after {
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: #0066cc;
+    background-color: #4A3B24; /* Brown */
 }
 
 /* Main section styling */
@@ -143,6 +143,7 @@ a {
 
 a:hover {
     text-decoration: underline;
+    text-decoration-color: #4A3B24;
 }
 
 /* Blog styles */
