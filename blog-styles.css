@@ -107,7 +107,7 @@ p {
     margin: 1rem 0;
 }
 
-/* Blog posts grid layout */
+/* Blog posts grid layout - only for index page */
 .blog-posts {
     display: grid;
     grid-template-columns: repeat(4, 280px);
@@ -117,8 +117,7 @@ p {
     padding: 1rem;
 }
 
-/* Blog specific styles - overriding monospace for blog content */
-.blog-post {
+.blog-posts .blog-post {
     font-family: 'Inter', sans-serif !important;
     line-height: 1.4;
     padding: 1.25rem;
@@ -134,10 +133,19 @@ p {
     height: 280px;
 }
 
-.blog-post:hover {
+.blog-posts .blog-post:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.08);
     border-color: #d0d0d0;
+}
+
+/* Individual blog post styles - full width layout */
+.blog-post {
+    font-family: 'Inter', sans-serif !important;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
 }
 
 .blog-post h3 {
@@ -211,6 +219,23 @@ p {
     color: #004c99;
     text-decoration: none;
     background: none;
+}
+
+/* Individual blog post page styles */
+.blog-post-content {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.blog-post-content h1,
+.blog-post-content h2,
+.blog-post-content h3 {
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 }
 
 /* Responsive adjustments for blog grid */

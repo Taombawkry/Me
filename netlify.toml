@@ -1,10 +1,11 @@
 [build]
-  command = "python build.py"
+  command = "pip install -r requirements.txt && python build.py"
   publish = "output"
   
 [build.environment]
-  PYTHON_VERSION = "3.8"
+  PYTHON_VERSION = "3.11"
   NETLIFY = "true"
+  PIP_NO_CACHE_DIR = "false"
 
 [[redirects]]
   from = "/*"
