@@ -77,11 +77,10 @@ section h2 {
     font-family: 'Courier New', Courier, monospace;
     font-size: 1.5rem;
     margin-bottom: 1rem;
-}
-
-/* Remove duplicate headers from markdown content */
-section h2:first-child {
-    display: none;
+    color: #333;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* Links */
