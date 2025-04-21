@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ title }} – Thomas Gondwe{% endblock %}</title>
+  <link rel="stylesheet" href="{{ css_path }}">
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.esm.min.mjs"></script>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'default',
+      securityLevel: 'loose',
+      fontFamily: 'Courier New, Courier, monospace',
+      themeVariables: {
+        primaryColor: '#4A3B24',
+        primaryTextColor: '#333333',
+        primaryBorderColor: '#444444',
+        lineColor: '#666666',
+        fontSize: '14px'
+      }
+    });
+  </script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="base-content">
+  <header class="base-content"><h1>Thomas M. Gondwe</h1></header>
+  <nav class="base-content">
+    <ul>
+      <li><a href="{{ home_link }}">Home</a></li>
+      <li><a href="{{ home_link }}#about">About</a></li>
+      <li><a href="{{ home_link }}#social-links">Social</a></li>
+      <li><a href="{{ blog_link }}">Blog</a></li>
+      <li><a href="{{ home_link }}#writings">Writings</a></li>
+      <li><a href="{{ home_link }}#email">Email</a></li>
+      <li><a href="{{ home_link }}#schedule-call">Schedule a Call</a></li>
+    </ul>
+  </nav>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

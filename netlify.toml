@@ -1,6 +1,20 @@
 [build]
-  command = "pip install markdown pyyaml && python build.py"
+  command = "pip install -r requirements.txt && python build.py"
   publish = "output"
   
 [build.environment]
-  PYTHON_VERSION = "3.8"
+  PYTHON_VERSION = "3.11"
+  NETLIFY = "true"
+  PIP_NO_CACHE_DIR = "false"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[dev]
+  command = "python build.py && python -m http.server -d output"
+  targetPort = 8000
+  port = 8000
+  publish = "output"
+  autoLaunch = true

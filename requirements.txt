@@ -1,0 +1,5 @@
+markdown>=3.4.0
+pyyaml>=6.0.0
+pygments>=2.15.0   # For code highlighting
+markdown-mermaid>=0.2 
+jinja2>=3.0.0      # For templating

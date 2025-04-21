@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block extra_head %}
+  {% if category %}
+    <link rel="stylesheet" href="../../blog-styles.css">
+  {% else %}
+    <link rel="stylesheet" href="../blog-styles.css">
+  {% endif %}
+{% endblock %}
+{% block content %}
+<section class="blog-section base-content">
+  <h2>{{ title }}</h2>
+  <div class="blog-categories">
+    <a href="{{ index_link }}" class="blog-category {{ 'active' if not category else '' }}">All</a>
+    {% for cat in categories %}
+      <a href="{{ cat.link }}" class="blog-category {{ 'active' if cat.name == category else '' }}">
+        {{ cat.name.title() }}
+      </a>
+    {% endfor %}
+  </div>
+  <div class="blog-posts">
+    {% for post in posts %}
+      <article class="blog-post">
+        <h3><a href="{{ post.link }}">{{ post.title }}</a></h3>
+        <div class="blog-post-meta">
+          <span>{{ post.date.strftime('%B %d, %Y') }}</span> •
+          <span>Category: <a href="category/{{ post.category }}.html">{{ post.category.title() }}</a></span>
+        </div>
+        <a href="{{ post.link }}" class="blog-post-link">Read more →</a>
+      </article>
+    {% else %}
+      <p>No posts found.</p>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

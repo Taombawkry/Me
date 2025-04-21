@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block extra_head %}
+  <link rel="stylesheet" href="../../blog-styles.css">
+{% endblock %}
+{% block content %}
+<article class="blog-post" style="max-width: 800px; margin: 0 auto; text-align: left;">
+  <h1>{{ post.title }}</h1>
+
+  {% if post.description %}
+    <div class="blog-description-title" style="font-size:0.85em; color:#444444; margin-bottom:0.5rem;">
+      Description
+    </div>
+    <div class="blog-description" style="color:#444444; font-size:0.9em; font-style:italic; margin:0 0 1.5rem 0;">
+      {{ post.description }}
+    </div>
+  {% endif %}
+
+  <div class="blog-post-meta" style="margin-bottom:1rem;">
+    <span>{{ post.date.strftime('%B %d, %Y') }}</span> •
+    <span>Category: <a href="../category/{{ post.category }}.html">{{ post.category.title() }}</a></span>
+  </div>
+
+  <hr style="border:0;border-bottom:1px solid #cccccc;margin:1.5rem 0;" />
+
+  <div class="blog-post-content">
+    {{ post.content | safe }}
+  </div>
+
+  <div class="blog-post-navigation" style="margin-top:2rem;">
+    {% if post.prev %}
+      <a href="../{{ post.prev.link }}" class="blog-post-navigation-prev">&larr; {{ post.prev.title }}</a>
+    {% else %}
+      <span></span>
+    {% endif %}
+    
+    <a href="{{ blog_link }}" class="blog-post-navigation-back">All Posts</a>
+    
+    {% if post.next %}
+      <a href="../{{ post.next.link }}" class="blog-post-navigation-next">{{ post.next.title }} &rarr;</a>
+    {% else %}
+      <span></span>
+    {% endif %}
+  </div>
+</article>
+{% endblock %}
