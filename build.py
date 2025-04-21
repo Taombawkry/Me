@@ -41,7 +41,11 @@ def load_markdown(path: Path):
     text = path.read_text(encoding='utf-8')
     if text.startswith('---'):
         _, fm, body = text.split('---', 2)
-        front = yaml.safe_load(fm)
+        try:
+            front = yaml.safe_load(fm)
+        except yaml.YAMLError as e:
+            print(f"Error parsing YAML frontmatter in {path}: {e}")
+            front = {}
     else:
         front, body = {}, text
     html = md.convert(body)
@@ -174,7 +178,10 @@ def build_site():
     clean_output()
     # Copy static assets
     shutil.copy('styles.css', OUTPUT_DIR / 'styles.css')
-    shutil.copy('blog-styles.css', OUTPUT_DIR / 'blog-styles.css')
+    if Path('blog-styles.css').exists():
+        shutil.copy('blog-styles.css', OUTPUT_DIR / 'blog-styles.css')
+    else:
+        print("Warning: 'blog-styles.css' not found. Skipping copy.")
     # Build main sections
     sections = {p.stem: load_markdown(p) for p in CONTENT_DIR.glob('*.md')}
     base_tmpl = env.get_template('index.html')
