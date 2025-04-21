@@ -36,6 +36,15 @@ def clean_output():
     if OUTPUT_DIR.exists():
         shutil.rmtree(OUTPUT_DIR)
     OUTPUT_DIR.mkdir(parents=True)
+    
+    # Ensure blog directory structure exists
+    blog_dir = CONTENT_DIR / 'blog'
+    blog_dir.mkdir(exist_ok=True)
+    
+    # Ensure category directories exist
+    categories = ['essays', 'tech', 'thoughts', 'tutorials']
+    for category in categories:
+        (blog_dir / category).mkdir(exist_ok=True)
 
 def load_markdown(path: Path):
     text = path.read_text(encoding='utf-8')
