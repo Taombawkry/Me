@@ -1,6 +1,6 @@
 ---
 title: "A Movie Essay: Between Reality and Fiction"
-date: 2024-04-21
+date: 2025-02-21
 category: essay
 tags: [film, review, narrative]
 description: "A comparative view of two films made several years apart, but explore the same spectrum but on different ends of crafting a world for a screenplay."

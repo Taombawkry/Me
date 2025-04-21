@@ -45,7 +45,7 @@ nav ul li {
 
 nav ul li a {
     text-decoration: none;
-    color: #0066cc;
+    color: #4A3B24;
     font-size: 0.9rem;
     padding: 0.3rem 0.6rem;
     display: inline-block;
@@ -56,6 +56,7 @@ nav ul li a {
 nav ul li a:hover {
     text-decoration: underline;
     background: #f5f5f5;
+    text-decoration-color: #4A3B24;
 }
 
 section {
@@ -93,14 +94,15 @@ ul li {
 }
 
 a {
-    color: #0066cc;
+    color: #4A3B24;
     text-decoration: none;
     padding: 0.1rem 0.2rem;
 }
 
 a:hover {
     text-decoration: underline;
-    background: #f0f0f0;
+    background: #f0eae4;
+    text-decoration-color: #4A3B24;
 }
 
 p {
@@ -120,7 +122,7 @@ p {
 .blog-posts .blog-post {
     font-family: 'Inter', sans-serif !important;
     line-height: 1.4;
-    padding: 1.25rem;
+    padding: 1rem;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.04);
@@ -137,6 +139,40 @@ p {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px rgba(0,0,0,0.08);
     border-color: #d0d0d0;
+}
+
+/* Blog card styles */
+.blog-posts .blog-post h3 {
+    font-size: 1.1rem;
+    margin: 0 0 0.75rem 0;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    max-height: 2.8em;
+    line-height: 1.4;
+}
+
+.blog-posts .blog-post h3 a {
+    color: #333;
+    text-decoration: none;
+    background: none;
+    padding: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Adjust card spacing to accommodate truncated titles */
+.blog-posts .blog-post-excerpt {
+    font-size: 0.85rem;
+    color: #444;
+    margin-top: 0.5rem;
+    margin-bottom: 0.75rem;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 /* Individual blog post styles - full width layout */
@@ -161,7 +197,7 @@ p {
 }
 
 .blog-post h3 a:hover {
-    color: #0066cc;
+    color: #63503A;
     text-decoration: none;
     background: none;
 }
@@ -184,15 +220,18 @@ p {
 }
 
 .blog-post-meta a {
-    color: inherit;
+    color: #4A3B24;
     text-decoration: none;
-    background: none;
-    padding: 0;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    background: #f8f9fa;
+    transition: all 0.2s ease;
 }
 
 .blog-post-meta a:hover {
     text-decoration: underline;
-    background: none;
+    text-decoration-color: #4A3B24;
+    background: #f0eae4;
 }
 
 .blog-post-excerpt {
@@ -210,15 +249,14 @@ p {
     display: inline-block;
     margin-top: auto;
     font-size: 0.9rem;
-    color: #0066cc;
+    color: #4A3B24;
     text-decoration: none;
     font-weight: 500;
 }
 
 .blog-post-link:hover {
-    color: #004c99;
-    text-decoration: none;
-    background: none;
+    text-decoration-color: #4A3B24;
+    background: #f0eae4;
 }
 
 /* Individual blog post page styles */
@@ -290,7 +328,7 @@ p {
 .blog-post blockquote {
     margin: 2rem 0;
     padding: 1rem 2rem;
-    border-left: 4px solid #0066cc;
+    border-left: 4px solid #4A3B24;
     background: #f8f9fa;
     font-style: italic;
     border-radius: 0 4px 4px 0;
@@ -376,23 +414,23 @@ p {
 }
 
 .blog-category[href*="tech"] {
-    background: #e1f5fe;
-    color: #0277bd;
+    background: #f5f0e6;
+    color: #4A3B24;
 }
 
 .blog-category[href*="essays"] {
-    background: #f3e5f5;
-    color: #7b1fa2;
+    background: #ede5d8;
+    color: #635242;
 }
 
 .blog-category[href*="thoughts"] {
-    background: #e8f5e9;
-    color: #2e7d32;
+    background: #e8e0d5;
+    color: #796957;
 }
 
 .blog-category[href*="tutorials"] {
-    background: #fff3e0;
-    color: #ef6c00;
+    background: #f2ece3;
+    color: #8B7355;
 }
 
 .blog-category.active {
@@ -403,11 +441,14 @@ p {
 .blog-category:hover {
     filter: brightness(0.95);
     text-decoration: none;
+    text-decoration-color: #4A3B24;
 }
 
-.blog-category.active {
-    background: #0066cc;
-    color: white;
+.blog-category[href*="tech"]:hover,
+.blog-category[href*="essays"]:hover,
+.blog-category[href*="thoughts"]:hover,
+.blog-category[href*="tutorials"]:hover {
+    text-decoration-color: #4A3B24;
 }
 
 /* Code blocks - always monospace */
@@ -442,7 +483,7 @@ p {
 
 .blog-post-navigation a {
     text-decoration: none;
-    color: #0066cc;
+    color: #4A3B24;
     padding: 0.5rem 1rem;
     border-radius: 4px;
     transition: all 0.2s ease;
@@ -450,7 +491,7 @@ p {
 }
 
 .blog-post-navigation a:hover {
-    background: #e9ecef;
+    background: #f0eae4;
     text-decoration: none;
 }
 
@@ -483,13 +524,12 @@ p {
     padding: 1rem;
 }
 
-/* Mermaid node styles */
 .mermaid .node rect,
 .mermaid .node circle,
 .mermaid .node ellipse,
 .mermaid .node polygon,
 .mermaid .node path {
-    stroke: #333;
+    stroke: #4A3B24;
     fill: #fff;
     stroke-width: 2px;
 }
@@ -573,29 +613,28 @@ code {
 .codehilite .cs { color: #6a737d } /* Comment.Special */
 .codehilite .gd { color: #b31d28; background-color: #ffeef0 } /* Generic.Deleted */
 .codehilite .ge { font-style: italic } /* Generic.Emph */
-.codehilite .gh { color: #005cc5 } /* Generic.Heading */
+.codehilite .gh { color: #4A3B24 } /* Generic.Heading */
 .codehilite .gi { color: #22863a; background-color: #f0fff4 } /* Generic.Inserted */
 .codehilite .gp { color: #6a737d } /* Generic.Prompt */
 .codehilite .gs { font-weight: bold } /* Generic.Strong */
 .codehilite .gu { color: #6f42c1 } /* Generic.Subheading */
-.codehilite .kc { color: #005cc5 } /* Keyword.Constant */
+.codehilite .kc { color: #4A3B24 } /* Keyword.Constant */
 .codehilite .kd { color: #d73a49 } /* Keyword.Declaration */
 .codehilite .kn { color: #d73a49 } /* Keyword.Namespace */
 .codehilite .kp { color: #d73a49 } /* Keyword.Pseudo */
 .codehilite .kr { color: #d73a49 } /* Keyword.Reserved */
 .codehilite .kt { color: #d73a49 } /* Keyword.Type */
-.codehilite .m { color: #005cc5 } /* Literal.Number */
+.codehilite .m { color: #4A3B24 } /* Literal.Number */
 .codehilite .s { color: #032f62 } /* Literal.String */
 .codehilite .na { color: #6f42c1 } /* Name.Attribute */
-.codehilite .nb { color: #005cc5 } /* Name.Builtin */
+.codehilite .nb { color: #4A3B24 } /* Name.Builtin */
 .codehilite .nc { color: #6f42c1 } /* Name.Class */
-.codehilite .no { color: #005cc5 } /* Name.Constant */
+.codehilite .no { color: #4A3B24 } /* Name.Constant */
 .codehilite .nd { color: #6f42c1 } /* Name.Decorator */
-.codehilite .ni { color: #005cc5 } /* Name.Entity */
+.codehilite .ni { color: #4A3B24 } /* Name.Entity */
 .codehilite .ne { color: #6f42c1 } /* Name.Exception */
 .codehilite .nf { color: #6f42c1 } /* Name.Function */
-.codehilite .nl { color: #005cc5 } /* Name.Label */
-.codehilite .nn { color: #6f42c1 } /* Name.Namespace */
+.codehilite .nl { color: #4A3B24 } /* Name.Label */
 .codehilite .nt { color: #22863a } /* Name.Tag */
 .codehilite .nv { color: #24292e } /* Name.Variable */
 .codehilite .ow { color: #d73a49 } /* Operator.Word */

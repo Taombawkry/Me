@@ -191,12 +191,17 @@ def build_site():
         shutil.copy('blog-styles.css', OUTPUT_DIR / 'blog-styles.css')
     else:
         print("Warning: 'blog-styles.css' not found. Skipping copy.")
+    
+    # Get current timestamp for cache busting
+    timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
+    
     # Build main sections
     sections = {p.stem: load_markdown(p) for p in CONTENT_DIR.glob('*.md')}
     base_tmpl = env.get_template('index.html')
     html = base_tmpl.render(
         title="Thomas Gondwe",
-        css_path='styles.css',
+        css_path=f'styles.css?v={timestamp}',
+        now=timestamp,
         **{ name: content for name, (_, content) in sections.items() }
     )
     (OUTPUT_DIR / 'index.html').write_text(html, encoding='utf-8')

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ title }}</title>
   {# Link to your main site stylesheet #}
-  <link rel="stylesheet" href="{{ css_path }}">
+  <link rel="stylesheet" href="{{ css_path }}?v={{ now }}">
 </head>
 <body>
   <header class="site-header">
@@ -27,32 +27,38 @@
 
   <main>
     {# == About Section == #}
-    <section id="about">
+    <section id="about" class="main-section">
+      <h2 class="section-heading">About Me</h2>
       {{ about | safe }}
     </section>
 
     {# == Social Links Section == #}
-    <section id="social-links">
+    <section id="social-links" class="main-section">
+      <h2 class="section-heading">Social Links</h2>
       {{ social | safe }}
     </section>
 
     {# == Blog Teaser Section == #}
-    <section id="blog">
+    <section id="blog" class="main-section">
+      <h2 class="section-heading">Blog</h2>
       {{ blog | safe }}
     </section>
 
     {# == Writings Section == #}
-    <section id="writings">
+    <section id="writings" class="main-section">
+      <h2 class="section-heading">Writings</h2>
       {{ writings | safe }}
     </section>
 
     {# == Email Section == #}
-    <section id="email">
+    <section id="email" class="main-section">
+      <h2 class="section-heading">Email</h2>
       {{ email | safe }}
     </section>
 
     {# == Schedule-a-Call Section == #}
-    <section id="schedule-call">
+    <section id="schedule-call" class="main-section">
+      <h2 class="section-heading">Schedule a Call</h2>
       {{ schedule | safe }}
     </section>
   </main>
