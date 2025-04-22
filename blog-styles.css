@@ -651,6 +651,117 @@ code {
 /* Responsive design */
 @media (max-width: 768px) {
     body {
+        padding: 0.5rem;
+    }
+    
+    header {
+        padding: 1rem 0;
+    }
+    
+    nav ul {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    nav ul li {
+        width: 100%;
+    }
+    
+    nav ul li a {
+        display: block;
+        width: 100%;
+        text-align: center;
+        padding: 0.8rem;
+        background: #f5f5f5;
+        border-radius: 4px;
+    }
+    
+    .blog-posts {
+        padding: 1rem 0.5rem;
+        grid-template-columns: 1fr;
+    }
+    
+    .blog-posts .blog-post {
+        width: 100%;
+        height: auto;
+        min-height: 200px;
+    }
+    
+    .blog-post-content {
+        padding: 1rem;
+    }
+    
+    .blog-post h1 { 
+        font-size: 1.8rem; 
+    }
+    
+    .blog-post h2 { 
+        font-size: 1.5rem; 
+    }
+    
+    .blog-post h3 { 
+        font-size: 1.3rem; 
+    }
+    
+    .blog-categories {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    
+    .blog-category {
+        width: 100%;
+        text-align: center;
+        padding: 0.8rem;
+    }
+    
+    .blog-post-navigation {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .blog-post-navigation a {
+        padding: 1rem;
+        width: 100%;
+    }
+    
+    .blog-post-navigation-prev,
+    .blog-post-navigation-next,
+    .blog-post-navigation-back {
+        justify-self: stretch;
+    }
+    
+    pre, code {
+        max-width: 100%;
+        word-wrap: break-word;
+    }
+}
+
+@media (max-width: 480px) {
+    .blog-post h1 { 
+        font-size: 1.6rem; 
+    }
+    
+    .blog-post-content {
+        font-size: 1rem;
+        line-height: 1.6;
+    }
+    
+    .blog-post blockquote {
+        padding: 0.8rem 1rem;
+        margin: 1.5rem 0;
+    }
+    
+    .blog-post-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
         padding: 0 1rem;
     }
     
