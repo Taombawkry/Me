@@ -247,30 +247,59 @@ pre code {
     background: #f8f9fa;
 }
 
+/* Add media queries for responsiveness */
+
+/* For tablets and larger phones */
 @media (max-width: 768px) {
     body {
         padding: 0 1rem;
     }
-    
+
     nav ul {
         flex-direction: column;
     }
-    
+
     section {
         padding: 1rem 0;
     }
-    
+
     nav ul li {
         margin: 0.5rem 0;
     }
-    
+
     nav ul li a {
         padding: 0.5rem;
         font-size: 1rem;
     }
-    
-    .blog-categories {
-        flex-direction: column;
-        align-items: center;
+
+    .blog-posts {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .blog-post {
+        padding: 1rem;
+    }
+}
+
+/* For small phones */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    nav ul li a {
+        font-size: 0.9rem;
+    }
+
+    .blog-posts {
+        grid-template-columns: 1fr;
+    }
+
+    .blog-post {
+        padding: 0.5rem;
+    }
+
+    section h2 {
+        font-size: 1.25rem;
     }
 }
