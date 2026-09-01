@@ -96,11 +96,16 @@ def _get_token():
 
 
 def _pick_images(images):
-    """Spotify returns images largest-first. Give back (large, small)."""
+    """
+    Spotify returns images largest-first (typically 640 / 300 / 64).
+    Give back (large, small) — 'small' is the MIDDLE size where there is one,
+    because the smallest is a 64px thumb that looks soft in the archive strip.
+    """
     urls = [img['url'] for img in (images or []) if img.get('url')]
     if not urls:
         return None, None
-    return urls[0], urls[-1]
+    small = urls[len(urls) // 2] if len(urls) > 2 else urls[-1]
+    return urls[0], small
 
 
 def _from_api(kind, spotify_id):

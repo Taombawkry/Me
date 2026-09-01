@@ -44,6 +44,7 @@
 
 .pw-tile {
     position: relative;
+    box-sizing: border-box;
     display: block;
     aspect-ratio: 1 / 1;
     overflow: hidden;
@@ -64,8 +65,19 @@
 .pw-art {
     display: block;
     width: 100%;
-    height: 100%;
+    /* The img height="..." attribute is a presentational hint that sets a real
+       used height, which suppresses aspect-ratio. Reset it to auto so the
+       square ratio governs; the rule below re-fills genuinely square parents. */
+    height: auto;
     object-fit: cover;
+}
+
+/* Where the parent is already a square box, fill it. Setting height:100%
+   globally instead made the art fight its own aspect-ratio and land ~4px
+   taller than wide, which object-fit:cover then cropped off the sides. */
+.pw-tile .pw-art,
+.pw-card-tile .pw-art {
+    height: 100%;
 }
 
 .pw-art-missing {
@@ -170,10 +182,14 @@
     grid-template-columns: repeat(6, 1fr);
     gap: 6px;
     margin-top: 0.8rem;
+    /* Grid items stretch by default, which would override the art's
+       aspect-ratio and pull each cover into a tall sliver. */
+    align-items: start;
 }
 
 .pw-strip .pw-art {
     aspect-ratio: 1 / 1;
+    box-sizing: border-box;
     border: 1px solid #e0e0e0;
 }
 
@@ -194,11 +210,11 @@
 }
 
 .pw-card {
-    /* Whichever of height/width binds first, the 9:16 ratio holds. */
+    /* Constrain width only — with both axes pinned the browser ignores
+       aspect-ratio, which is how the card drifted to 0.4669 on tall screens.
+       56.25svh == 0.5625 * 100svh, so the card never exceeds the viewport. */
+    width: min(100vw, 56.25svh);
     aspect-ratio: 9 / 16;
-    height: 100svh;
-    max-height: 100svh;
-    max-width: 100vw;
     container-type: inline-size;
 
     display: flex;
@@ -236,21 +252,15 @@
     gap: 2.5cqw;
 }
 
-.pw-card-wall .pw-art {
+.pw-card-tile {
+    display: block;
     aspect-ratio: 1 / 1;
+    box-sizing: border-box;
     border: 0.25cqw solid #e0e0e0;
+    overflow: hidden;
+    text-decoration: none;
 }
 
 .pw-card-wall .pw-art-missing {
     font-size: 6cqw;
-}
-
-.pw-card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-top: auto;
-    padding-top: 3cqw;
-    font-size: 2.6cqw;
-    color: #666;
 }
