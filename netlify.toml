@@ -3,7 +3,10 @@
   publish = "output"
   
 [build.environment]
-  PYTHON_VERSION = "3.11"
+  # The build itself is Python; NODE_VERSION just pins Netlify's toolchain
+  # so deploys don't drift when they move the default.
+  NODE_VERSION = "24"
+  PYTHON_VERSION = "3.13"
   NETLIFY = "true"
   PIP_NO_CACHE_DIR = "false"
 

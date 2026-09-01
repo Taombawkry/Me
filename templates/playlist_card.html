@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>{{ month.title }} – Playlist Card</title>
+  <link rel="stylesheet" href="../playlist-styles.css">
+</head>
+{# Standalone 9:16 card for screenshotting straight to Instagram.
+   Everything is sized in cqw (percent of card width), so it renders
+   identically at any screen size — no JS, no fixed pixel canvas. #}
+<body class="pw-cardpage">
+  <div class="pw-card">
+
+    <header class="pw-card-header">
+      <span class="pw-card-title">{{ month.title }}</span>
+      {% if month.note %}<span class="pw-card-note">{{ month.note }}</span>{% endif %}
+    </header>
+
+    <div class="pw-card-wall">
+      {% for item in month.card_tiles %}
+        {% if item.art %}
+          <img class="pw-art" src="{{ item.art }}" alt="{{ item.name }}"
+               decoding="async" width="640" height="640">
+        {% else %}
+          <span class="pw-art pw-art-missing">♫</span>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <footer class="pw-card-footer">
+      <span>thomasgondwe.com</span>
+      <span>via Spotify</span>
+    </footer>
+
+  </div>
+</body>
+</html>

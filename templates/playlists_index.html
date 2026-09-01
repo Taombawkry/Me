@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Playlists – Thomas Gondwe{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="../playlist-styles.css">
+{% endblock %}
+{% block content %}
+<section class="pw base-content">
+
+  <header class="pw-header">
+    <h2>Playlists</h2>
+    <p class="pw-note">A wall of what I was listening to, one month at a time.</p>
+  </header>
+
+  {% for month in months %}
+    <article class="pw-monthblock">
+      <h3><a href="{{ month.slug }}.html">{{ month.title }}</a></h3>
+      {% if month.note %}<p class="pw-note">{{ month.note }}</p>{% endif %}
+      <a class="pw-strip" href="{{ month.slug }}.html" aria-label="{{ month.title }}">
+        {% for item in month.tiles[:6] %}
+          {% if item.art %}
+            <img class="pw-art" src="{{ item.art_small or item.art }}" alt=""
+                 loading="lazy" decoding="async" width="300" height="300">
+          {% endif %}
+        {% endfor %}
+      </a>
+    </article>
+  {% else %}
+    <p>No playlist months yet.</p>
+  {% endfor %}
+
+  <p class="pw-credit"><span>Cover art and metadata from Spotify.</span></p>
+
+</section>
+{% endblock %}

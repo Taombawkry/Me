@@ -7,6 +7,7 @@ build.py — a minimalist orchestrator that:
 """
 import os
 import shutil
+import sys
 import yaml
 import json
 import re
@@ -15,9 +16,15 @@ from datetime import datetime, date
 from markdown import Markdown
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
+import spotify
+
 # Paths
 CONTENT_DIR = Path('content')
+PLAYLIST_DIR = CONTENT_DIR / 'playlists'
 OUTPUT_DIR  = Path('output')
+
+# 3 columns x 5 rows fills a 9:16 card exactly.
+CARD_TILES = 15
 TEMPLATES   = FileSystemLoader('templates')
 env = Environment(
     loader=TEMPLATES,
@@ -140,6 +147,7 @@ def build_blog():
             post=post,
             home_link='../../index.html',
             blog_link='../../blog/index.html',
+            playlists_link='../../playlists/index.html',
             css_path='../../styles.css'
         )
         outpath.write_text(rendered, encoding='utf-8')
@@ -157,6 +165,7 @@ def build_blog():
         category=None,
         home_link="../index.html",
         blog_link="index.html",
+        playlists_link="../playlists/index.html",
         css_path="../styles.css"
     )
     # write it out
@@ -176,6 +185,7 @@ def build_blog():
             category=name,
             home_link="../../index.html",  # Fixed path
             blog_link="../index.html",     # Fixed path
+            playlists_link="../../playlists/index.html",
             css_path="../../styles.css"    # Fixed path
         )
         outpath = OUTPUT_DIR / 'blog' / 'category' / f"{name}.html"
@@ -183,7 +193,100 @@ def build_blog():
         outpath.write_text(cat_html, encoding='utf-8')
 
 
-def build_site():
+def build_playlists(refresh=False):
+    """
+    Read content/playlists/YYYY-MM.yml, resolve each Spotify URL to cover art
+    via spotify.py (cached), then render a month wall, a 9:16 story card and
+    an archive index.
+    """
+    if not PLAYLIST_DIR.exists():
+        print("No content/playlists/ — skipping the playlist wall.")
+        return
+
+    spotify.load_dotenv()
+    cache = spotify.load_cache()
+    months = []
+
+    for yml in sorted(PLAYLIST_DIR.glob('*.yml'), reverse=True):
+        data = yaml.safe_load(yml.read_text(encoding='utf-8')) or {}
+        slug = yml.stem
+        print(f"  playlists: {slug}")
+
+        items = []
+        for raw in data.get('items') or []:
+            # Accept both "- url: ..." and a bare "- https://..." string.
+            if isinstance(raw, str):
+                raw = {'url': raw}
+            entry = spotify.resolve(raw.get('url', ''), cache, refresh=refresh)
+            item = dict(entry) if entry else {
+                'name': '', 'subtitle': '', 'art': None,
+                'art_small': None, 'url': raw.get('url', '#'),
+            }
+            if raw.get('note'):
+                item['note'] = raw['note']
+            items.append(item)
+
+        # NB: keyed 'tiles', not 'items' — Jinja resolves `month.items`
+        # to dict.items() rather than the key.
+        months.append({
+            'slug': slug,
+            'title': data.get('title') or slug,
+            'note': data.get('note', ''),
+            'tiles': items,
+            'card_tiles': items[:CARD_TILES],
+        })
+
+    spotify.save_cache(cache)
+
+    if not months:
+        print("  playlists: no month files found.")
+        return
+
+    # months is newest-first; prev = older, next = newer (matches the blog)
+    for i, month in enumerate(months):
+        month['prev'] = months[i + 1] if i < len(months) - 1 else None
+        month['next'] = months[i - 1] if i > 0 else None
+
+    out = OUTPUT_DIR / 'playlists'
+    out.mkdir(parents=True, exist_ok=True)
+
+    wall_tmpl = env.get_template('playlists.html')
+    card_tmpl = env.get_template('playlist_card.html')
+    for month in months:
+        (out / f"{month['slug']}.html").write_text(
+            wall_tmpl.render(
+                month=month,
+                title=month['title'],
+                home_link='../index.html',
+                blog_link='../blog/index.html',
+                playlists_link='index.html',
+                css_path='../styles.css',
+            ),
+            encoding='utf-8',
+        )
+        (out / f"{month['slug']}-card.html").write_text(
+            card_tmpl.render(month=month), encoding='utf-8'
+        )
+
+    idx_tmpl = env.get_template('playlists_index.html')
+    (out / 'index.html').write_text(
+        idx_tmpl.render(
+            months=months,
+            title='Playlists',
+            home_link='../index.html',
+            blog_link='../blog/index.html',
+            playlists_link='index.html',
+            css_path='../styles.css',
+        ),
+        encoding='utf-8',
+    )
+
+    resolved = sum(1 for m in months for i in m['tiles'] if i.get('art'))
+    total = sum(len(m['tiles']) for m in months)
+    print(f"  playlists: {len(months)} month(s), {resolved}/{total} tiles resolved")
+
+
+def build_site(refresh_playlists=False):
     clean_output()
     # Copy static assets
     shutil.copy('styles.css', OUTPUT_DIR / 'styles.css')
@@ -191,6 +294,11 @@ def build_site():
         shutil.copy('blog-styles.css', OUTPUT_DIR / 'blog-styles.css')
     else:
         print("Warning: 'blog-styles.css' not found. Skipping copy.")
+
+    if Path('playlist-styles.css').exists():
+        shutil.copy('playlist-styles.css', OUTPUT_DIR / 'playlist-styles.css')
+    else:
+        print("Warning: 'playlist-styles.css' not found. Skipping copy.")
     
     # Get current timestamp for cache busting
     timestamp = datetime.now().strftime('%Y%m%d%H%M%S')
@@ -207,7 +315,11 @@ def build_site():
     (OUTPUT_DIR / 'index.html').write_text(html, encoding='utf-8')
     # Blog
     build_blog()
+    # Playlist wall
+    build_playlists(refresh=refresh_playlists)
     print("✨ Build complete — check output/index.html")
 
 if __name__ == '__main__':
-    build_site()
+    # `python build.py --refresh-playlists` re-fetches every tile from Spotify
+    # instead of trusting content/playlists/_cache.json.
+    build_site(refresh_playlists='--refresh-playlists' in sys.argv)

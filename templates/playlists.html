@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ month.title }} – Playlists – Thomas Gondwe{% endblock %}
+{% block extra_head %}
+  <link rel="stylesheet" href="../playlist-styles.css">
+{% endblock %}
+{% block content %}
+<section class="pw base-content">
+
+  <header class="pw-header">
+    <h2>{{ month.title }}</h2>
+    {% if month.note %}<p class="pw-note">{{ month.note }}</p>{% endif %}
+  </header>
+
+  <div class="pw-wall">
+    {% for item in month.tiles %}
+      {% if item.art %}
+        <a class="pw-tile" href="{{ item.url }}" target="_blank" rel="noopener noreferrer">
+          <img class="pw-art" src="{{ item.art }}" alt="{{ item.name }}"
+               loading="lazy" decoding="async" width="640" height="640">
+          <span class="pw-meta">
+            <span class="pw-name">{{ item.name }}</span>
+            {% if item.note %}<span class="pw-sub">{{ item.note }}</span>
+            {% elif item.subtitle %}<span class="pw-sub">{{ item.subtitle }}</span>{% endif %}
+          </span>
+        </a>
+      {% else %}
+        <span class="pw-tile pw-tile-missing" title="Could not resolve this one">
+          <span class="pw-art pw-art-missing">♫</span>
+        </span>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <nav class="pw-monthnav">
+    {% if month.prev %}<a href="{{ month.prev.slug }}.html">&larr; {{ month.prev.title }}</a>{% else %}<span></span>{% endif %}
+    <a href="index.html">All months</a>
+    {% if month.next %}<a href="{{ month.next.slug }}.html">{{ month.next.title }} &rarr;</a>{% else %}<span></span>{% endif %}
+  </nav>
+
+  <p class="pw-credit">
+    <a href="{{ month.slug }}-card.html">Open the 9:16 story card &rarr;</a>
+    <span>Cover art and metadata from Spotify.</span>
+  </p>
+
+</section>
+{% endblock %}

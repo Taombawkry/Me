@@ -3,3 +3,4 @@ pyyaml>=6.0.0
 pygments>=2.15.0   # For code highlighting
 markdown-mermaid>=0.2 
 jinja2>=3.0.0      # For templating
+requests>=2.31.0  # Spotify API calls at build time

@@ -1,0 +1,256 @@
+/* ============================================================
+   playlist-styles.css — the monthly playlist wall
+   Palette follows styles.css: #4A3B24 brown, #333 text, mono.
+   No JavaScript: layout is CSS grid, the 9:16 card uses
+   container query units so it scales to any screen.
+   ============================================================ */
+
+.pw,
+.pw * {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* ---------- page header ---------- */
+.pw-header {
+    margin-bottom: 1.5rem;
+}
+
+.pw-header h2 {
+    margin: 0 0 0.3rem 0;
+    color: #1a1a1a;
+}
+
+.pw-note {
+    margin: 0;
+    color: #666;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* ---------- the wall ---------- */
+.pw-wall {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin: 1.5rem 0;
+}
+
+@media (min-width: 560px) {
+    .pw-wall {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 10px;
+    }
+}
+
+.pw-tile {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f0f0f0;
+    border: 1px solid #e0e0e0;
+    text-decoration: none;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.pw-tile:hover,
+.pw-tile:focus-visible {
+    transform: scale(1.03);
+    border-color: #4A3B24;
+    outline: none;
+    z-index: 2;
+}
+
+.pw-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pw-art-missing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    color: #999;
+    font-size: 1.4rem;
+}
+
+/* label overlay — keeps the collage clean until you hover */
+.pw-meta {
+    position: absolute;
+    inset: auto 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15em;
+    padding: 0.5em;
+    background: linear-gradient(transparent, rgba(26, 26, 26, 0.92));
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.pw-tile:hover .pw-meta,
+.pw-tile:focus-visible .pw-meta {
+    opacity: 1;
+}
+
+.pw-name {
+    font-size: 0.7rem;
+    line-height: 1.25;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.pw-sub {
+    font-size: 0.62rem;
+    color: #d8d0c4;
+}
+
+/* ---------- month navigation + credit ---------- */
+.pw-monthnav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+    font-size: 0.8rem;
+}
+
+.pw-monthnav a {
+    color: #4A3B24;
+    text-decoration: none;
+}
+
+.pw-monthnav a:hover {
+    text-decoration: underline;
+}
+
+.pw-credit {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    color: #666;
+    font-size: 0.75rem;
+}
+
+.pw-credit a {
+    color: #4A3B24;
+}
+
+/* ---------- archive index ---------- */
+.pw-monthblock {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.pw-monthblock h3 {
+    margin: 0 0 0.3rem 0;
+}
+
+.pw-monthblock h3 a {
+    color: #1a1a1a;
+    text-decoration: none;
+}
+
+.pw-monthblock h3 a:hover {
+    color: #4A3B24;
+}
+
+.pw-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 6px;
+    margin-top: 0.8rem;
+}
+
+.pw-strip .pw-art {
+    aspect-ratio: 1 / 1;
+    border: 1px solid #e0e0e0;
+}
+
+/* ============================================================
+   9:16 story card — /playlists/YYYY-MM-card.html
+   Screenshot this straight into Instagram.
+   ============================================================ */
+
+.pw-cardpage {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    background: #1a1a1a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100svh;
+}
+
+.pw-card {
+    /* Whichever of height/width binds first, the 9:16 ratio holds. */
+    aspect-ratio: 9 / 16;
+    height: 100svh;
+    max-height: 100svh;
+    max-width: 100vw;
+    container-type: inline-size;
+
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 5cqw;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    font-family: 'Courier New', Courier, monospace;
+    overflow: hidden;
+}
+
+.pw-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8cqw;
+    margin-bottom: 3.5cqw;
+}
+
+.pw-card-title {
+    font-size: 6.5cqw;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+}
+
+.pw-card-note {
+    font-size: 3cqw;
+    color: #4A3B24;
+    font-style: italic;
+}
+
+.pw-card-wall {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5cqw;
+}
+
+.pw-card-wall .pw-art {
+    aspect-ratio: 1 / 1;
+    border: 0.25cqw solid #e0e0e0;
+}
+
+.pw-card-wall .pw-art-missing {
+    font-size: 6cqw;
+}
+
+.pw-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: auto;
+    padding-top: 3cqw;
+    font-size: 2.6cqw;
+    color: #666;
+}
