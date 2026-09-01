@@ -43,6 +43,17 @@
     "subtitle": "D'Angelo · 2000",
     "url": "https://open.spotify.com/album/2lO9yuuIDgBpSJzxTh3ai8"
   },
+  "album:52yD51X7yDinwlg6tbCtpP": {
+    "art": "https://i.scdn.co/image/ab67616d0000b273e6b88d3e4886ae3a17621c53",
+    "art_small": "https://i.scdn.co/image/ab67616d00001e02e6b88d3e4886ae3a17621c53",
+    "fetched": "2026-09-01T10:08:25Z",
+    "id": "52yD51X7yDinwlg6tbCtpP",
+    "kind": "album",
+    "name": "NEVER ENOUGH",
+    "source": "api",
+    "subtitle": "Turnstile · 2025",
+    "url": "https://open.spotify.com/album/52yD51X7yDinwlg6tbCtpP"
+  },
   "album:6eKe5wqXAHA1LLnIwGuaSI": {
     "art": "https://i.scdn.co/image/ab67616d0000b27309f94e5a4dce3beb3c27c4f1",
     "art_small": "https://i.scdn.co/image/ab67616d00001e0209f94e5a4dce3beb3c27c4f1",
@@ -64,17 +75,6 @@
     "source": "api",
     "subtitle": "Prince · 2018",
     "url": "https://open.spotify.com/album/6gbmDvcU1JDPy1niL6YFJY"
-  },
-  "album:7lb4ck9tn2ZaJRrYjhyP9A": {
-    "art": "https://i.scdn.co/image/ab67616d0000b273969c21ea34fe372a3e468947",
-    "art_small": "https://i.scdn.co/image/ab67616d00001e02969c21ea34fe372a3e468947",
-    "fetched": "2026-09-01T09:52:51Z",
-    "id": "7lb4ck9tn2ZaJRrYjhyP9A",
-    "kind": "album",
-    "name": "CASE STUDY 01",
-    "source": "api",
-    "subtitle": "Daniel Caesar · 2019",
-    "url": "https://open.spotify.com/album/7lb4ck9tn2ZaJRrYjhyP9A"
   },
   "playlist:0X8mC9nwSVKI0rDr61n00x": {
     "art": "https://mosaic.scdn.co/640/ab67616d00001e021aa47e71c4edfeaddb65cd54ab67616d00001e025a395a75b03347163aa8dab9ab67616d00001e02c41f4e1133b0e6c5fcf58680ab67616d00001e02fbcaf7402f38faac27610efc",

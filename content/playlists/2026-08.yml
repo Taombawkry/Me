@@ -1,24 +1,29 @@
 # One file per month: content/playlists/YYYY-MM.yml
 # Paste Spotify URLs (playlist / album / track). The build resolves cover art
 # and titles automatically — you never write image URLs or JSON by hand.
-# 15 items fills the 9:16 story card exactly (3 x 5).
+# 15 items fills the 9:16 story card exactly (3 x 5). Order here = order shown.
 
 title: "August 2026"
 note: "on repeat this month"
 
 items:
-  - https://open.spotify.com/album/289GZwycrFReuNB706obBx      # oh yeah
-  - https://open.spotify.com/album/6eKe5wqXAHA1LLnIwGuaSI      # before the world blows
-  - https://open.spotify.com/album/2lO9yuuIDgBpSJzxTh3ai8      # voodoo
-  - https://open.spotify.com/album/0jkt3srLRp00WfEKCIXJoe      # hope
-  - https://open.spotify.com/playlist/0vO1PA4tqghz3fAvb9LklY   # summers outside
-  - https://open.spotify.com/album/0aHQE8ekQDOa9BhMWT3HcN      # the new testament
-  - https://open.spotify.com/album/6gbmDvcU1JDPy1niL6YFJY      # piano and a microphone
-  - https://open.spotify.com/album/7lb4ck9tn2ZaJRrYjhyP9A      # case study 01
+  # --- row 1 ---
   - https://open.spotify.com/playlist/45Wi1Jg2x2f9jpKvthGDHu   # thing
+  - https://open.spotify.com/album/289GZwycrFReuNB706obBx      # oh yeah
+  - https://open.spotify.com/playlist/0gXcD9p0duLOYhJ6xjGQi5   # f*ck
+  # --- row 2 ---
+  - https://open.spotify.com/album/6eKe5wqXAHA1LLnIwGuaSI      # before the world blows
+  - https://open.spotify.com/playlist/0vO1PA4tqghz3fAvb9LklY   # summers outside
+  - https://open.spotify.com/album/52yD51X7yDinwlg6tbCtpP      # never enough — turnstile
+  # --- row 3 ---
   - https://open.spotify.com/playlist/7JXegLAJClkrMVTTBgfkrB   # there's a one wayn g song for everything
   - https://open.spotify.com/playlist/1KdLt2QXgltSGAvvX7y2bR   # 90s rnb
-  - https://open.spotify.com/playlist/0gXcD9p0duLOYhJ6xjGQi5   # f*ck
   - https://open.spotify.com/playlist/0X8mC9nwSVKI0rDr61n00x   # remastered
+  # --- row 4 ---
   - https://open.spotify.com/playlist/73JZYllwKxQvyU7Dt2jn9j   # songs of sorts
   - https://open.spotify.com/playlist/1bszrpz3eFdquLa4oMAXst   # sounds of sorts
+  - https://open.spotify.com/album/2lO9yuuIDgBpSJzxTh3ai8      # voodoo
+  # --- row 5 ---
+  - https://open.spotify.com/album/0jkt3srLRp00WfEKCIXJoe      # hope
+  - https://open.spotify.com/album/0aHQE8ekQDOa9BhMWT3HcN      # the new testament — t-fire
+  - https://open.spotify.com/album/6gbmDvcU1JDPy1niL6YFJY      # piano and a microphone — prince
